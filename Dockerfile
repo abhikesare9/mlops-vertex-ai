@@ -3,9 +3,7 @@ WORKDIR /app
 USER 0
 COPY requirements.txt /app
 COPY main.py /app
-COPY countVectorizer.pkl /app
-COPY model_xgb.pkl /app
-COPY scaler.pkl /app
+COPY *.json /app
 RUN pip3 install -r requirements.txt
 ENTRYPOINT ["python3","main.py"]
 EXPOSE 5000

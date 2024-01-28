@@ -9,6 +9,25 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pickle
 import base64
+from google.cloud import storage
+
+import os
+
+
+# define function that generates the public URL, default expiration is set to 24 hours
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r'celtic-house-412214-b0285d141708.json'
+
+# define function that downloads a file from the bucket
+def download_cs_file(bucket_name, file_name, destination_file_name): 
+    storage_client = storage.Client()
+
+    bucket = storage_client.bucket(bucket_name)
+
+    blob = bucket.blob(file_name)
+    blob.download_to_filename(destination_file_name)
+
+    return True
+
 
 STOPWORDS = set(stopwords.words("english"))
 
@@ -52,12 +71,6 @@ def single_prediction(predictor, scaler, cv, text_input):
     return "Positive" if y_predictions == 1 else "Negative"
 
 
-
-
-
-
-
-
 def sentiment_mapping(x):
     if x == 1:
         return "Positive"
@@ -66,4 +79,7 @@ def sentiment_mapping(x):
 
 
 if __name__ == "__main__":
+    download_cs_file('amazon-sentimental-analysis-data-iks','models/model_xgb.pkl','model_xgb.pkl')
+    download_cs_file('amazon-sentimental-analysis-data-iks','models/scaler.pkl','scaler.pkl')
+    download_cs_file('amazon-sentimental-analysis-data-iks','models/countVectorizer.pkl','countVectorizer.pkl')
     app.run(host="0.0.0.0",port=5000, debug=True)
