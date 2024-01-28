@@ -2,8 +2,10 @@ From python:3.10-bullseye
 USER 0
 WORKDIR /app
 COPY requirements.txt /app
+COPY *.json /app
 COPY dataset_balanced_clean_mv.csv /app
 COPY training.py /app
 RUN pip3 install -r requirements.txt
-ENTRYPOINT ["python3","training.py"]
+RUN python3 training.py
+
 
